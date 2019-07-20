@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jbi xmlns="http://java.sun.com/xml/ns/jbi" xmlns:ns1="http://j2ee.netbeans.org/wsdl/newWSDL" xmlns:ns2="http://enterprise.netbeans.org/bpel/BpelM/Process" xmlns:ns3="http://ws.com/" xmlns:ns4="http://ws2.com/" version="1.0">
+    <service-assembly>
+        <identification>
+            <name>CompositeApplication</name>
+            <description>Represents the Service Assembly of CompositeApplication</description>
+        </identification>
+        <connections>
+            <connection>
+                <consumer endpoint-name="newWSDLPort" service-name="ns1:newWSDLService"/>
+                <provider endpoint-name="newWSDLPortTypeRole_myRole" service-name="ns2:PartnerLink1"/>
+            </connection>
+            <connection>
+                <consumer endpoint-name="DisplayAverageRole_partnerRole" service-name="ns2:PartnerLinkWS1"/>
+                <provider endpoint-name="DisplayAveragePort" service-name="ns3:DisplayAverageService"/>
+            </connection>
+            <connection>
+                <consumer endpoint-name="AdmittedOrNotRole_partnerRole" service-name="ns2:PartnerLinkWS2"/>
+                <provider endpoint-name="AdmittedOrNotPort" service-name="ns4:AdmittedOrNotService"/>
+            </connection>
+        </connections>
+    </service-assembly>
+</jbi>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process
+    name="Process"
+    targetNamespace="http://enterprise.netbeans.org/bpel/BpelM/Process"
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:sxt="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Trace" 
+    xmlns:sxed="http://www.sun.com/wsbpel/2.0/process/executable/SUNExtension/Editor"
+    xmlns:tns="http://enterprise.netbeans.org/bpel/BpelM/Process">
+    <import namespace="http://enterprise.netbeans.org/bpel/DisplayAverageServiceWrapper" location="DisplayAverageServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://ws.com/" location="DisplayAverageService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://enterprise.netbeans.org/bpel/AdmittedOrNotServiceWrapper" location="AdmittedOrNotServiceWrapper.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://ws2.com/" location="AdmittedOrNotService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <import namespace="http://j2ee.netbeans.org/wsdl/newWSDL" location="newWSDL.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <partnerLinks>
+        <partnerLink name="PartnerLink1" xmlns:tns="http://j2ee.netbeans.org/wsdl/newWSDL" partnerLinkType="tns:newWSDL" myRole="newWSDLPortTypeRole"/>
+        <partnerLink name="PartnerLinkWS1" xmlns:tns="http://enterprise.netbeans.org/bpel/DisplayAverageServiceWrapper" partnerLinkType="tns:DisplayAverageLinkType" partnerRole="DisplayAverageRole"/>
+        <partnerLink name="PartnerLinkWS2" xmlns:tns="http://enterprise.netbeans.org/bpel/AdmittedOrNotServiceWrapper" partnerLinkType="tns:AdmittedOrNotLinkType" partnerRole="AdmittedOrNotRole"/>
+    </partnerLinks>
+    <variables>
+        <variable name="AONOut" xmlns:tns="http://ws2.com/" messageType="tns:AONResponse"/>
+        <variable name="AONIn" xmlns:tns="http://ws2.com/" messageType="tns:AON"/>
+        <variable name="GeneralAverageOut" xmlns:tns="http://ws.com/" messageType="tns:generalAverageResponse"/>
+        <variable name="GeneralAverageIn" xmlns:tns="http://ws.com/" messageType="tns:generalAverage"/>
+        <variable name="NewWSDLOperationOut" xmlns:tns="http://j2ee.netbeans.org/wsdl/newWSDL" messageType="tns:newWSDLOperationResponse"/>
+        <variable name="NewWSDLOperationIn" xmlns:tns="http://j2ee.netbeans.org/wsdl/newWSDL" messageType="tns:newWSDLOperationRequest"/>
+    </variables>
+    <sequence>
+        <receive name="Receive1" createInstance="yes" partnerLink="PartnerLink1" operation="newWSDLOperation" xmlns:tns="http://j2ee.netbeans.org/wsdl/newWSDL" portType="tns:newWSDLPortType" variable="NewWSDLOperationIn"/>
+        <assign name="Assign1">
+            <copy>
+                <from variable="NewWSDLOperationIn" part="id1"/>
+                <to>$GeneralAverageIn.parameters/id</to>
+            </copy>
+        </assign>
+        <invoke name="Invoke1" partnerLink="PartnerLinkWS1" operation="generalAverage" xmlns:tns="http://ws.com/" portType="tns:DisplayAverage" inputVariable="GeneralAverageIn" outputVariable="GeneralAverageOut"/>
+        <if name="If1">
+            <condition>$GeneralAverageOut.parameters/return &gt; 10</condition>
+            <sequence name="Sequence1">
+                <assign name="Assign3">
+                    <copy>
+                        <from variable="NewWSDLOperationIn" part="id1"/>
+                        <to>$AONIn.parameters/id</to>
+                    </copy>
+                </assign>
+                <invoke name="Invoke2" partnerLink="PartnerLinkWS2" operation="AON" xmlns:tns="http://ws2.com/" portType="tns:AdmittedOrNot" inputVariable="AONIn" outputVariable="AONOut"/>
+                <if name="If2">
+                    <condition>$AONOut.parameters/return</condition>
+                    <assign name="Assign4">
+                        <copy>
+                            <from>'admitted without debts'</from>
+                            <to variable="NewWSDLOperationOut" part="res"/>
+                        </copy>
+                    </assign>
+                    <else>
+                        <assign name="Assign5">
+                            <copy>
+                                <from>'Admitted with debts'</from>
+                                <to variable="NewWSDLOperationOut" part="res"/>
+                            </copy>
+                        </assign>
+                    </else>
+                </if>
+            </sequence>
+            <else>
+                <assign name="Assign2">
+                    <copy>
+                        <from>'not admitted'</from>
+                        <to variable="NewWSDLOperationOut" part="res"/>
+                    </copy>
+                </assign>
+            </else>
+        </if>
+        <reply name="Reply1" partnerLink="PartnerLink1" operation="newWSDLOperation" xmlns:tns="http://j2ee.netbeans.org/wsdl/newWSDL" portType="tns:newWSDLPortType" variable="NewWSDLOperationOut"/>
+    </sequence>
+</process>

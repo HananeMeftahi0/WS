@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jbi xmlns="http://java.sun.com/xml/ns/jbi" xmlns:ns1="http://j2ee.netbeans.org/wsdl/newWSDL" xmlns:ns2="http://enterprise.netbeans.org/bpel/BpelM/Process" xmlns:ns3="http://ws.com/" xmlns:ns4="http://ws2.com/" version="1.0">
+    <services binding-component="true">
+        <provides endpoint-name="DisplayAveragePort" interface-name="ns3:DisplayAverage" service-name="ns3:DisplayAverageService"/>
+        <provides endpoint-name="AdmittedOrNotPort" interface-name="ns4:AdmittedOrNot" service-name="ns4:AdmittedOrNotService"/>
+        <consumes endpoint-name="newWSDLPort" interface-name="ns1:newWSDLPortType" service-name="ns1:newWSDLService"/>
+    </services>
+</jbi>

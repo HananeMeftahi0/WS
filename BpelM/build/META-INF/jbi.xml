@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jbi xmlns="http://java.sun.com/xml/ns/jbi" xmlns:ns0="http://enterprise.netbeans.org/bpel/BpelM/Process" xmlns:ns1="http://j2ee.netbeans.org/wsdl/newWSDL" xmlns:ns2="http://ws.com/" xmlns:ns3="http://ws2.com/" xmlns:ns4="http://www.sun.com/jbi/descriptor/service-unit" version="1.0">
+    <services binding-component="false">
+        <provides endpoint-name="newWSDLPortTypeRole_myRole" interface-name="ns1:newWSDLPortType" service-name="ns0:PartnerLink1">
+            <ns4:display-name>PartnerLink1</ns4:display-name>
+            <ns4:process-name>Process</ns4:process-name>
+            <ns4:file-path>Process.bpel</ns4:file-path>
+        </provides>
+        <consumes endpoint-name="DisplayAverageRole_partnerRole" interface-name="ns2:DisplayAverage" service-name="ns0:PartnerLinkWS1">
+            <ns4:display-name>PartnerLinkWS1</ns4:display-name>
+            <ns4:process-name>Process</ns4:process-name>
+            <ns4:file-path>Process.bpel</ns4:file-path>
+        </consumes>
+        <consumes endpoint-name="AdmittedOrNotRole_partnerRole" interface-name="ns3:AdmittedOrNot" service-name="ns0:PartnerLinkWS2">
+            <ns4:display-name>PartnerLinkWS2</ns4:display-name>
+            <ns4:process-name>Process</ns4:process-name>
+            <ns4:file-path>Process.bpel</ns4:file-path>
+        </consumes>
+    </services>
+</jbi>
